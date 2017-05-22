@@ -2,6 +2,7 @@
 
 import os
 import sys
+import datetime
 import threading
 import traceback
 
@@ -14,6 +15,7 @@ from cqsdk import RE_CQ_SPECIAL, \
 
 CQ_ROOT = r'D:\Program Files\酷Q Air'
 CQ_IMAGE_ROOT = os.path.join(CQ_ROOT, r'data/image')
+NOW =datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 def info(*args, **kwargs):
@@ -42,6 +44,7 @@ def match(text, keywords):
 
 def reply(qqbot, message, text):
     reply_msg = None
+    f = open('logs/record.log','a',encoding='gbk')
     if isinstance(message, RcvdPrivateMessage):
         reply_msg = SendPrivateMessage(
             qq=message.qq,
@@ -59,8 +62,12 @@ def reply(qqbot, message, text):
             )
     if reply_msg:
         qqbot.send(reply_msg)
+        print(NOW)
+        f.write(NOW+'   '+str(message)+'\n')
+        f.write(NOW+'   '+str(reply_msg)+'\n')
         print("↘", message)
         print("↗", reply_msg)
+        f.close()
 
 
 class FileDownloader(threading.Thread):
