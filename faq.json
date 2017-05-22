@@ -1,0 +1,22 @@
+[
+  {
+    "keywords":["下载","升级包"],
+    "message":"下载地址：http://www.mca.gov.cn/article/sj/shfwytj/sj/",
+    "interval": 5
+  },
+  {
+    "keywords": ["早安", "早上好"],
+    "message": "早安",
+    "interval": 4
+  },
+  {
+    "keywords": ["午安", "中午好"],
+    "message": "午安",
+    "interval": 4
+  },
+  {
+    "keywords": ["晚安", "好梦"],
+    "message": "晚安",
+    "interval": 4
+  }
+]
