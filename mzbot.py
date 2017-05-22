@@ -4,9 +4,9 @@
 import json
 import random
 import re
+import datetime
 import time
 from validator import validator
-from datetime import datetime, timedelta
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from cqsdk import CQBot, CQAt, RE_CQ_SPECIAL, RcvdPrivateMessage, \
@@ -30,6 +30,9 @@ MZ_GROUP = '590149885'
 with open('admin.json', 'r', encoding="utf-8") as f:
     ADMIN = json.loads(f.read())
 
+
+
+
 @qqbot.listener((RcvdGroupMessage, GroupMemberIncrease))
 def restriction(message):
     if isinstance(message, (GroupMemberIncrease, )):
@@ -38,6 +41,22 @@ def restriction(message):
         return True
     # else
     return False
+
+################
+#Recorder
+################
+
+@qqbot.listener((RcvdGroupMessage,))
+def groupchatRecoder(message):
+    NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open('logs/groupchat.log','a',encoding='gbk') as file:
+        file.write(NOW+'    '+str(message)+'\n')
+
+@qqbot.listener((RcvdPrivateMessage, ))
+def privateRecoder(message):
+    NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open('logs/privatechat.log','a',encoding='gbk') as file:
+        file.write(NOW+'    '+str(message)+'\n')
 
 ################
 # FAQ

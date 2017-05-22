@@ -15,7 +15,7 @@ from cqsdk import RE_CQ_SPECIAL, \
 
 CQ_ROOT = r'D:\Program Files\酷Q Air'
 CQ_IMAGE_ROOT = os.path.join(CQ_ROOT, r'data/image')
-NOW =datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
 
 
 def info(*args, **kwargs):
@@ -62,6 +62,7 @@ def reply(qqbot, message, text):
             )
     if reply_msg:
         qqbot.send(reply_msg)
+        NOW =datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(NOW)
         f.write(NOW+'   '+str(message)+'\n')
         f.write(NOW+'   '+str(reply_msg)+'\n')
