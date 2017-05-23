@@ -7,6 +7,7 @@ import re
 import datetime
 import time
 from validator import validator
+from validator import validatorBarcode
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from cqsdk import CQBot, CQAt, RE_CQ_SPECIAL, RcvdPrivateMessage, \
@@ -99,7 +100,7 @@ def faq(message):
             send_text = faq.message
 
         faq.triggered = now
-        reply(qqbot, message, send_text)
+        reply(qqbot, message, "[CQ:at,qq={}]".format(message.qq)+send_text)
         return True
 
 ################  Query Organisitions by code
@@ -107,6 +108,8 @@ def faq(message):
 def queryOrgByOrgcode(message):
     texts = message.text
     dartRe = re.search('^([0-9]|[A-Z]){9}$',texts)
+    if validatorBarcode(texts)==False:
+        return
     if dartRe != None:
         result = queryOrgByCode(dartRe.group(0))
         if result != '':
@@ -119,6 +122,8 @@ def queryOrgByOrgcode(message):
 def queryRegioninfoByRegioncode(message):
     texts = message.text
     dartRe =re.search('^\d{9}$',texts)
+    if validatorBarcode(texts)==True:
+        return
     if dartRe != None:
         result = queryRegionByCode(dartRe.group(0))
         if result != '':
@@ -139,7 +144,7 @@ def join(message):
 
 
 
-#########   USCC校验
+#########   USCC validae
 @qqbot.listener((RcvdGroupMessage, RcvdPrivateMessage))
 def validateUSCC(message):
     text = message.text
