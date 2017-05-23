@@ -13,6 +13,7 @@ from cqsdk import CQBot, CQAt, RE_CQ_SPECIAL, RcvdPrivateMessage, \
     RcvdGroupMessage, SendGroupMessage, GroupMemberIncrease,  GroupBan
 from utils import match, reply
 from db.queryOrgs import queryOrgByCode
+from db.queryRegions import queryRegionByCode
 
 
 qqbot = CQBot(11235)
@@ -99,16 +100,29 @@ def faq(message):
         reply(qqbot, message, send_text)
         return True
 
+################  Query Organisitions by code
 @qqbot.listener((RcvdPrivateMessage, RcvdGroupMessage))
-def queryByOrgcode(message):
+def queryOrgByOrgcode(message):
     texts = message.text
-    dartRe=re.search('^([0-9]|[A-Z]){9}$',texts)
-    if dartRe!=None:
-        result=queryOrgByCode(dartRe.group(0))
-        if result!='':
+    dartRe = re.search('^([0-9]|[A-Z]){9}$',texts)
+    if dartRe != None:
+        result = queryOrgByCode(dartRe.group(0))
+        if result != '':
             reply(qqbot, message, "[CQ:at,qq={}]{}".format(message.qq, result))
         else:
-            reply(qqbot, message, "[CQ:at,qq={}] 组织机构代码：{}{}".format(message.qq,dartRe.group(0),'\n库中无此单位'))
+            reply(qqbot, message, "[CQ:at,qq={}] 组织机构代码：{}{}".format(message.qq,dartRe.group(0),'\n机构库中查不到此单位'))
+
+################ Query Regioncode By regioncode
+@qqbot.listener((RcvdGroupMessage, RcvdPrivateMessage))
+def queryRegioninfoByRegioncode(message):
+    texts = message.text
+    dartRe =re.search('^\d{9}$',texts)
+    if dartRe != None:
+        result = queryRegionByCode(dartRe.group(0))
+        if result != '':
+            reply(qqbot, message, "[CQ:at,qq={}]{}".format(message.qq,'查询区划代码：'+dartRe.group(0)+'\n反馈结果：\n'+result))
+        else:
+            reply(qqbot, message, "[CQ:at,qq={}]区划代码：{}{}".format(message.qq, dartRe.group(0),'\n该代码未被使用过（区县以上）'))
 
 ################
 # Join & Leave
@@ -127,7 +141,8 @@ def join(message):
 @qqbot.listener((RcvdGroupMessage, RcvdPrivateMessage))
 def validateUSCC(message):
     text = message.text
-    if len(text)==18:
+    dartRe=re.search('^([0-9]|[A-Z]){18}$',text)
+    if  dartRe != None:
         result = validator(text)
         if result==text:
             reply(qqbot, message, "[CQ:at,qq={}]{}".format(message.qq,'  代码：'+text+'\n校验正确！'))
