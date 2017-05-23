@@ -63,6 +63,17 @@ def privateRecoder(message):
         file.write(NOW+'    '+str(message)+'\n')
 
 ################
+# Join & Leave
+################
+@qqbot.listener((GroupMemberIncrease, ))
+def join(message):
+    qqbot.send(SendGroupMessage(
+        group=message.group,
+        text="{} 欢迎来到民政统计群，请将群名片改为地区+姓氏的格式。".format(
+            CQAt(message.operatedQQ))
+    ))
+
+################
 # FAQ
 ################
 class FAQObject:
@@ -131,30 +142,16 @@ def queryRegioninfoByRegioncode(message):
         else:
             reply(qqbot, message, "[CQ:at,qq={}]区划代码：{}{}".format(message.qq, dartRe.group(0),'\n该代码未被使用过（区县以上）'))
 
-################
-# Join & Leave
-################
-@qqbot.listener((GroupMemberIncrease, ))
-def join(message):
-    qqbot.send(SendGroupMessage(
-        group=message.group,
-        text="{} 欢迎来到民政统计群，请将群名片改为地区+姓氏的格式。".format(
-            CQAt(message.operatedQQ))
-    ))
-
-
-
 #########   USCC validae
 @qqbot.listener((RcvdGroupMessage, RcvdPrivateMessage))
 def validateUSCC(message):
     text = message.text
     dartRe=re.search('^([0-9]|[A-Z]){18}$',text)
     if  dartRe != None:
-        result = validator(text)
-        if result==text:
-            reply(qqbot, message, "[CQ:at,qq={}]{}".format(message.qq,'  代码：'+text+'\n校验正确！'))
+        if validator(text)==True:
+            reply(qqbot, message, "[CQ:at,qq={}]{}".format(message.qq,'\n统一社会信用代码：'+text+'\n√ 校验正确！√ '))
         else:
-            reply(qqbot, message, "[CQ:at,qq={}]{}".format(message.qq,'  代码：'+text+'\n不符合编码规则！'))
+            reply(qqbot, message, "[CQ:at,qq={}]{}".format(message.qq,'\n统一社会信用代码：'+text+'\n ×不符合编码规则！×'))
 
 #####   @ function test
 @qqbot.listener((RcvdGroupMessage,))

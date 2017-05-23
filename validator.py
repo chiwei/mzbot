@@ -16,13 +16,14 @@ def validator(usci):
         v_sum=0
         for i in range(1,18):
             v_sum = v_sum+checklist.index(usci[i-1])*(pow(3,i-1)%31)
-            print(v_sum)
         checkbit = 31-v_sum%31
-        print(checklist[checkbit])
         result=usci[0:17]+str(checklist[checkbit])
+        if result == usci:
+            return True
+        else:
+            return False
     else:
-        return
-    return result
+        return False
 
 def validatorBarcode(barcode):
     result = ''
