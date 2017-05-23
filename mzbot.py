@@ -26,6 +26,7 @@ scheduler = BackgroundScheduler(
 ################
 # Restriction
 ################
+'''
 MZ_GROUP = '590149885'
 
 with open('admin.json', 'r', encoding="utf-8") as f:
@@ -42,6 +43,7 @@ def restriction(message):
         return True
     # else
     return False
+'''
 
 ################
 #Recorder
