@@ -27,14 +27,10 @@ scheduler = BackgroundScheduler(
 ################
 # Restriction
 ################
-'''
 MZ_GROUP = '590149885'
 
 with open('admin.json', 'r', encoding="utf-8") as f:
     ADMIN = json.loads(f.read())
-
-
-
 
 @qqbot.listener((RcvdGroupMessage, GroupMemberIncrease))
 def restriction(message):
@@ -44,7 +40,6 @@ def restriction(message):
         return True
     # else
     return False
-'''
 
 ################
 #Recorder
@@ -124,7 +119,7 @@ def queryOrgByOrgcode(message):
     if dartRe != None:
         result = queryOrgByCode(dartRe.group(0))
         if result != '':
-            reply(qqbot, message, "[CQ:at,qq={}]{}".format(message.qq, result))
+            reply(qqbot, message, "[CQ:at,qq={}]\n{}".format(message.qq, result))
         else:
             reply(qqbot, message, "[CQ:at,qq={}] 组织机构代码：{}{}".format(message.qq,dartRe.group(0),'\n机构库中查不到此单位'))
 
