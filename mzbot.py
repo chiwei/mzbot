@@ -16,7 +16,6 @@ from utils import match, reply
 from db.queryOrgs import queryOrgByCode
 from db.queryRegions import queryRegionByCode
 
-
 qqbot = CQBot(11235)
 scheduler = BackgroundScheduler(
     timezone='Asia/Tokyo',
@@ -24,10 +23,8 @@ scheduler = BackgroundScheduler(
     )
 
 
-################
-# Restriction
-################
-MZ_GROUP = '590149885'
+################  Restriction
+MZ_GROUP = '625488910'
 
 with open('admin.json', 'r', encoding="utf-8") as f:
     ADMIN = json.loads(f.read())
@@ -41,9 +38,7 @@ def restriction(message):
     # else
     return False
 
-################
-#Recorder
-################
+################  Message Recorder
 
 @qqbot.listener((RcvdGroupMessage,))
 def groupchatRecoder(message):
@@ -57,9 +52,7 @@ def privateRecoder(message):
     with open('logs/privatechat.log','a',encoding='gbk') as file:
         file.write(NOW+'    '+str(message)+'\n')
 
-################
-# Join & Leave
-################
+################   Welcome infomation
 @qqbot.listener((GroupMemberIncrease, ))
 def join(message):
     qqbot.send(SendGroupMessage(
@@ -68,9 +61,7 @@ def join(message):
             CQAt(message.operatedQQ))
     ))
 
-################
-# FAQ
-################
+################   FAQ
 class FAQObject:
     DEFAULT_INTERVAL = 60
 
@@ -88,7 +79,7 @@ with open('faq.json', 'r', encoding="utf-8") as f:
         FAQ.append(FAQObject(faq))
 
 
-@qqbot.listener((RcvdGroupMessage, ))
+@qqbot.listener((RcvdGroupMessage, RcvdPrivateMessage))
 def faq(message):
     text = message.text.lower()
     now = time.time()
@@ -109,7 +100,7 @@ def faq(message):
         reply(qqbot, message, "[CQ:at,qq={}]".format(message.qq)+send_text)
         return True
 
-################  Query Organisitions by code
+################# Query Organisitions by code
 @qqbot.listener((RcvdPrivateMessage, RcvdGroupMessage))
 def queryOrgByOrgcode(message):
     texts = message.text
@@ -137,7 +128,7 @@ def queryRegioninfoByRegioncode(message):
         else:
             reply(qqbot, message, "[CQ:at,qq={}]区划代码：{}{}".format(message.qq, dartRe.group(0),'\n该代码未被使用过（区县以上）'))
 
-#########   USCC validae
+################ USCC validate
 @qqbot.listener((RcvdGroupMessage, RcvdPrivateMessage))
 def validateUSCC(message):
     text = message.text
@@ -148,7 +139,7 @@ def validateUSCC(message):
         else:
             reply(qqbot, message, "[CQ:at,qq={}]{}".format(message.qq,'\n统一社会信用代码：'+text+'\n ×不符合编码规则！×'))
 
-#####   @ function test
+################  @ function test
 @qqbot.listener((RcvdGroupMessage,))
 def atfunc(message):
     text = message.text
@@ -158,9 +149,7 @@ def atfunc(message):
         return
 
 
-################
-# __main__
-################
+################  main function
 if __name__ == '__main__':
     try:
         qqbot.start()
