@@ -1,9 +1,9 @@
 import math
 
-#####USCC
+##### USCC
 checklist ='0123456789ABCDEFGHJKLMNPQRTUWXY0'
 
-##### barcode 9
+##### Barcode 9
 checklistBarcode='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 barcodePow=[3,7,9,10,5,8,4,2]
 barcodeCheckbit = [0,1,2,3,4,5,6,7,8,9,'X',0]

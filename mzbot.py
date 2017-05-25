@@ -112,7 +112,7 @@ def queryOrgByOrgcode(message):
         if result != '':
             reply(qqbot, message, "[CQ:at,qq={}]\n{}".format(message.qq, result))
         else:
-            reply(qqbot, message, "[CQ:at,qq={}] 组织机构代码：{}{}".format(message.qq,dartRe.group(0),'\n机构库中查不到此单位'))
+            reply(qqbot, message, "[CQ:at,qq={}] 组织机构代码：{}{}".format(message.qq,dartRe.group(0),'\n机构标准库中查不到此单位'))
 
 ################ Query Regioncode By regioncode
 @qqbot.listener((RcvdGroupMessage, RcvdPrivateMessage))

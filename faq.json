@@ -1,7 +1,17 @@
 [
   {
-    "keywords":["下载","升级包","地址"],
+    "keywords":["下载","地址","安装包"],
     "message":"软件及升级包下载地址：\nhttp://www.mca.gov.cn/article/sj/shfwytj/sj/",
+    "interval": 5
+  },
+  {
+    "keywords":["整合平台"],
+    "message":"整合平台地址：\nhttp://202.108.98.71:6888/bi/",
+    "interval": 5
+  },
+  {
+    "keywords":["代码查询"],
+    "message":"全国组织机构代码管理中心：\nhttp://www.nacao.org.cn/portal/",
     "interval": 5
   },
   {
@@ -10,7 +20,12 @@
     "interval": 5
   },
   {
-    "keywords":["拒绝访问","错误号5"],
+    "keywords":["拒绝访问","错误号5","升级失败","升级不成功"],
+    "message":"出现错误号5拒绝访问错误，说明文件被占用或者权限不足。请查看是否开了两个软件，或未以管理员身份运行升级包。或开了金山毒霸等杀毒软件。",
+    "interval": 5
+  },
+  {
+    "keywords":["提取不了"],
     "message":"出现错误号5拒绝访问错误，说明文件被占用或者权限不足。请查看是否开了两个软件，或未以管理员身份运行升级包。或开了金山毒霸等杀毒软件。",
     "interval": 5
   },
