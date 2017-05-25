@@ -61,6 +61,34 @@ def join(message):
             CQAt(message.operatedQQ))
     ))
 
+################   About
+@qqbot.listener((RcvdGroupMessage, ))
+def about(message):
+    text = message.text.lower()
+    if re.match('^\/about$',text):
+        reply(qqbot, message,"Programmed by Chi,This project started at May 2017.\nSpecial thanks to yukixz and CoolQ project.\nAll right reserved by Chi.")
+
+
+################  Help
+@qqbot.listener((RcvdGroupMessage, ))
+def help(message):
+    text = message.text.lower()
+    if re.match('^\/help$',text):
+        reply(qqbot, message,"当前主要功能有：\n1、按组织机构代码查询标准库中的信息(database)\n2、按区划代码查询区划信息(database)\n3、校验统一社会信用代码(a simple calculator)\n4、FAQ\n/help\n/about")
+
+'''@TODO
+################   search web
+@qqbot.listener((RcvdPrivateMessage, ))
+def webSearch(message):
+    text = message.text
+    if re.match('^\/search\s',text):
+        reply(qqbot, message, "[CQ:at,qq={}] 搜索结果：https://www.baidu.com/s?wd={}".format(message.qq,text[8:len(text)]))
+    else:
+        print("false")
+'''
+
+
+
 ################   FAQ
 class FAQObject:
     DEFAULT_INTERVAL = 60
@@ -105,6 +133,8 @@ def faq(message):
 def queryOrgByOrgcode(message):
     texts = message.text
     dartRe = re.search('^([0-9]|[A-Z]){9}$',texts)
+    if dartRe == None:
+        return
     if validatorBarcode(texts)==False:
         return
     if dartRe != None:
@@ -119,6 +149,8 @@ def queryOrgByOrgcode(message):
 def queryRegioninfoByRegioncode(message):
     texts = message.text
     dartRe =re.search('^\d{9}$',texts)
+    if dartRe == None:
+        return
     if validatorBarcode(texts)==True:
         return
     if dartRe != None:
