@@ -10,8 +10,9 @@ from validator import validator
 from validator import validatorBarcode
 
 from apscheduler.schedulers.background import BackgroundScheduler
-from cqsdk import CQBot, CQAt, RE_CQ_SPECIAL, RcvdPrivateMessage, \
+from cqsdk import CQBot, CQAt, RE_CQ_SPECIAL, CQImage, RcvdPrivateMessage, \
     RcvdGroupMessage, SendGroupMessage, GroupMemberIncrease,  GroupBan
+from collections import deque
 from utils import match, reply
 from db.queryOrgs import queryOrgByCode
 from db.queryRegions import queryRegionByCode
@@ -22,9 +23,8 @@ scheduler = BackgroundScheduler(
     job_defaults={'misfire_grace_time': 60},
     )
 
-
 ################  Restriction
-MZ_GROUP = '625488910'
+MZ_GROUP = '92624304'
 
 with open('admin.json', 'r', encoding="utf-8") as f:
     ADMIN = json.loads(f.read())
@@ -87,6 +87,67 @@ def webSearch(message):
         print("false")
 '''
 
+################
+# repeat
+################
+REPEAT_QUEUE_SIZE = 20
+REPEAT_COUNT_MIN = 2
+REPEAT_COUNT_MAX = 4
+queue = deque()
+
+
+class QueueMessage:
+    def __init__(self, text):
+        self.text = text
+        self.count = 0
+        self.senders = set()
+        self.repeated = False
+
+
+class RandomQueue:
+    def __init__(self, init, time=1):
+        self.init = init
+        self.time = time
+        self.queue = []
+
+    def next(self):
+        if len(self.queue) == 0:
+            self.queue = self.time * self.init
+            random.shuffle(self.queue)
+        return self.queue.pop()
+
+
+@qqbot.listener((RcvdPrivateMessage))
+def repeat(message):
+    text = message.text
+    sender = message.qq
+
+        # Find & remove matched message from queue.
+    msg = None
+    for m in queue:
+        if m.text == text:
+            msg = m
+            queue.remove(m)
+            break
+
+    # Increase message count
+    if msg is None:
+        msg = QueueMessage(text)
+    msg.senders.add(sender)
+    msg.count = len(msg.senders)
+
+    # Push message back to queue
+    queue.appendleft(msg)
+    if len(queue) > REPEAT_QUEUE_SIZE:
+        queue.pop()
+
+        # Repeat message
+    if msg.repeated or msg.count < REPEAT_COUNT_MIN:
+        return
+    if random.randint(1, REPEAT_COUNT_MAX - msg.count + 1) == 1:
+        reply(qqbot, message, msg.text)
+        msg.repeated = True
+        return True
 
 
 ################   FAQ
